@@ -1,11 +1,12 @@
 
 import React, { memo } from 'react'
 
-import WordTypeProvider from './context/WordTypeContext'
+import WordAPIProvider from './context/WordAPIContext'
 
 const GlobalProvider = props => {
+    
     return (
-        <WordTypeProvider>{props.children}</WordTypeProvider>
+        <WordAPIProvider>{props.children}</WordAPIProvider>
     )
 }
 

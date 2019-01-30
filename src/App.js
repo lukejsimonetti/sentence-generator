@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { Card, Button, ButtonGroup, Container, Row, Col } from 'react-bootstrap'
+import React from 'react';
+import { Card, Container, Row, Col } from 'react-bootstrap'
 
 //import { WordTypeContext } from 'components/context/WordTypeContext'
 
@@ -8,7 +8,6 @@ import GlobalProvider from './components/GlobalProvider'
 import GeneratorForm from './GeneratorForm'
 
 const App = props => {
-  console.log(props)
   return (
     <GlobalProvider>
       <div className="App">
