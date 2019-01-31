@@ -3,13 +3,15 @@ import { Form as FinalForm, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
+
 import WordTypesDropdown from './components/form/WordTypesDropdown'
 import { WordAPIContext } from './components/context/WordAPIContext'
+import { AppStateContext } from './components/context/AppStateContext'
 
 const GeneratorForm = props => {
     const { wordList, setWordList, generateWord, preview, setPreview } = useContext(WordAPIContext)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    
+    const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
+
     const go = (initial, dynamic = []) => {
         setWordList([])
         setIsSubmitting(true)
@@ -18,28 +20,26 @@ const GeneratorForm = props => {
         mergedArr.push(initial)
         if (dynamic.length > 0) mergedArr.push(...dynamic)
 
-        const randomWords = mergedArr.map( v => {
-            return new Promise(( resolve, reject ) => {
-                generateWord( v.value, resolve );
+        const randomWords = mergedArr.map(v => {
+            return new Promise((resolve, reject) => {
+                generateWord(v.value, resolve);
             });
-          });
+        });
 
-        Promise.all( randomWords )
-        .then( words => 
-            setWordList(words)
-        );
-        setIsSubmitting(false)
+        Promise.all(randomWords)
+            .then(words =>
+                setWordList(words)
+            )
     }
 
     const stop = () => {
-        
+
     }
 
-    console.log("rendered", wordList)
     return (
         <div>
             <FinalForm
-                onSubmit={() => {}}
+                onSubmit={() => { }}
                 initialValues={{ 'initial_word_types': { value: 'adjective', label: 'adjective' } }}
                 mutators={{
                     ...arrayMutators
@@ -81,9 +81,9 @@ const GeneratorForm = props => {
                             <Col md={2}>
                                 <ButtonGroup>
                                     <Button
-                                        // disabled={isSubmitting}
+                                        disabled={isSubmitting}
                                         variant="success"
-                                        onClick={() => go(values.initial_word_types, values.dynamic_word_types) }>
+                                        onClick={() => go(values.initial_word_types, values.dynamic_word_types)}>
                                         <i className="fa fa-play" />
                                         Submitting
                                         </Button>
@@ -93,7 +93,6 @@ const GeneratorForm = props => {
                                 </ButtonGroup>
                             </Col>
                         </Row>
-                        {isSubmitting ? "true" : "False"}
                     </Form>
                 )}
             />
