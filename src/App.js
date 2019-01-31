@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card, Container, Row, Col } from 'react-bootstrap'
-
-//import { WordTypeContext } from 'components/context/WordTypeContext'
+import { Card, Container } from 'react-bootstrap'
 
 import GlobalProvider from './components/GlobalProvider'
 
 import GeneratorForm from './GeneratorForm'
+import SentencePreview from './SentencePreview'
 
 const App = props => {
   return (
@@ -16,11 +15,7 @@ const App = props => {
             <Card.Header as="h1" className="text-center">Surf's Up! <i className="fa fa-hand-rock-o"/></Card.Header>
             <Card.Body>
               <GeneratorForm />
-              <Row>
-                <Col md={12}>
-                  <input id="canvas" className="form-control" type="text" placeholder="Put your primo sentence here." disabled />
-                </Col>
-              </Row>
+              <SentencePreview />
             </Card.Body>
           </Card>
 

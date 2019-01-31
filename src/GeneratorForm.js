@@ -1,39 +1,49 @@
-import React, { memo, useContext, useState, useEffect } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
-
+import {sample} from 'lodash'
 import WordTypesDropdown from './components/form/WordTypesDropdown'
 import { WordAPIContext } from './components/context/WordAPIContext'
 
 const GeneratorForm = props => {
-    const { getGeneratedWord } = useContext(WordAPIContext)
-    const [wordState, setWordState] = useState([])
+    const { wordList, setWordList, generateWord } = useContext(WordAPIContext)
     const [isSubmitting, setIsSubmitting] = useState(false)
-
+    
     const go = (initial, dynamic = []) => {
+        setWordList([])
         setIsSubmitting(true)
+
         let mergedArr = []
         mergedArr.push(initial)
         if (dynamic.length > 0) mergedArr.push(...dynamic)
 
-        mergedArr.map((v, i) => {
-            return getGeneratedWord(v.value, setGeneratedWord)
-        })
+        const randomWords = mergedArr.map( v => {
+            return new Promise(( resolve, reject ) => {
+                generateWord( v.value, resolve );
+            });
+          });
+
+        Promise.all( randomWords )
+        .then( words => words.forEach((v) => {
+                addWord(v)
+        } ));
 
         setIsSubmitting(false)
     }
 
     const stop = () => {
-
+        
     }
 
-    const setGeneratedWord = (val) => {
-        const newState = wordState
-        setWordState([newState.push(val)])
+    const addWord = (val) =>  {
+        const newState = wordList
+        newState.push(val)
+        setWordList(newState);
     }
 
+    console.log(wordList)
     return (
         <div>
             <FinalForm

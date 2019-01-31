@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import {sample} from 'lodash'
 
 export const WordAPIContext = React.createContext({})
@@ -12,7 +12,7 @@ var dictionary = {
     noun: ['barrel', 'bro', 'bummer', 'dude', 'green room', 'honker', 'neptune cocktail', 'surfari'],
     verb: ['bailed out', 'maxed out', 'shredded', 'tubed', 'wiped out']
   };
-  
+
   // don't edit below this line!
   const getRandomWordFromAPI = (type, callback) => {
     return setTimeout(function() {
@@ -26,12 +26,14 @@ var dictionary = {
 
 const WordAPIProvider = props => {
 
-    const getGeneratedWord = (type, callback) => {
+    const [wordList, setWordList] = useState([])
+
+    const generateWord = (type, callback) => {
         //simulated xhr request
         return getRandomWordFromAPI(type, callback)
     }
 
-    return <WordAPIContext.Provider value={{ getGeneratedWord }}>{props.children}</WordAPIContext.Provider>
+    return <WordAPIContext.Provider value={{ wordList, setWordList, generateWord }}>{props.children}</WordAPIContext.Provider>
 }
 
 export default memo(WordAPIProvider)
