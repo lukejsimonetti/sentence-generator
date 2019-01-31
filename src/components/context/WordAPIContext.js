@@ -27,13 +27,16 @@ var dictionary = {
 const WordAPIProvider = props => {
 
     const [wordList, setWordList] = useState([])
+    const [preview, setPreview] = useState("")
 
     const generateWord = (type, callback) => {
         //simulated xhr request
         return getRandomWordFromAPI(type, callback)
     }
 
-    return <WordAPIContext.Provider value={{ wordList, setWordList, generateWord }}>{props.children}</WordAPIContext.Provider>
+    return <WordAPIContext.Provider value={{ wordList, setWordList, generateWord, preview, setPreview }}>
+        {props.children}
+    </WordAPIContext.Provider>
 }
 
 export default memo(WordAPIProvider)

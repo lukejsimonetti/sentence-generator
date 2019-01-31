@@ -1,14 +1,13 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext, useState, useEffect } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
-import {sample} from 'lodash'
 import WordTypesDropdown from './components/form/WordTypesDropdown'
 import { WordAPIContext } from './components/context/WordAPIContext'
 
 const GeneratorForm = props => {
-    const { wordList, setWordList, generateWord } = useContext(WordAPIContext)
+    const { wordList, setWordList, generateWord, preview, setPreview } = useContext(WordAPIContext)
     const [isSubmitting, setIsSubmitting] = useState(false)
     
     const go = (initial, dynamic = []) => {
@@ -26,10 +25,9 @@ const GeneratorForm = props => {
           });
 
         Promise.all( randomWords )
-        .then( words => words.forEach((v) => {
-                addWord(v)
-        } ));
-
+        .then( words => 
+            setWordList(words)
+        );
         setIsSubmitting(false)
     }
 
@@ -37,23 +35,17 @@ const GeneratorForm = props => {
         
     }
 
-    const addWord = (val) =>  {
-        const newState = wordList
-        newState.push(val)
-        setWordList(newState);
-    }
-
-    console.log(wordList)
+    console.log("rendered", wordList)
     return (
         <div>
             <FinalForm
-                onSubmit={() => { }}
+                onSubmit={() => {}}
                 initialValues={{ 'initial_word_types': { value: 'adjective', label: 'adjective' } }}
                 mutators={{
                     ...arrayMutators
                 }}
-                render={({ handleSubmit, mutators: { push, pop }, values }) => (
-                    <Form onSubmit={handleSubmit}>
+                render={({ mutators: { push, pop }, values }) => (
+                    <Form onSubmit={(e) => e.preventDefault()}>
                         <Row className="mb-3">
                             <Col md={2}>
                                 <Field
@@ -91,11 +83,7 @@ const GeneratorForm = props => {
                                     <Button
                                         // disabled={isSubmitting}
                                         variant="success"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            go(values.initial_word_types, values.dynamic_word_types);
-                                        }
-                                        }>
+                                        onClick={() => go(values.initial_word_types, values.dynamic_word_types) }>
                                         <i className="fa fa-play" />
                                         Submitting
                                         </Button>

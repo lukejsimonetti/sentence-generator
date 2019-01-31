@@ -1,17 +1,33 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { WordAPIContext } from './components/context/WordAPIContext'
 
-
 const SentencePreview = props => {
 
-    const { wordList, setWordList, generateWord } = useContext(WordAPIContext)
+    const { wordList, setWordList, generateWord, preview, setPreview } = useContext(WordAPIContext)
         
-    const getSentence = () => {
-        return wordList.map((v,i) => {
-            return ""+v+""
+    useEffect(() => {
+        buildPreview()
+    }, [wordList])
+
+    const buildPreview = () => {
+        if(wordList.length == 0) return
+
+        const lengthOffset = (wordList.length - 1)
+        let newPreview = ""
+        wordList.map( (v,i) => {
+            if(i == 0) {
+                v = v.charAt(0).toUpperCase() + v.slice(1)
+            }
+            if(i == lengthOffset) {
+                v += "!"
+            }
+            
+            newPreview += " " + v
+            setPreview(newPreview)
         })
     }
+
     return (
         <Row>
             <Col md={12}>
@@ -19,7 +35,7 @@ const SentencePreview = props => {
                     id="canvas" 
                     className="form-control" 
                     type="text" 
-                    value={wordList.map(v => v)}
+                    value={preview}
                     placeholder="Put your primo sentence here." 
                     disabled 
                 />
