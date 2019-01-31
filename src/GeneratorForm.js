@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState, useEffect } from 'react';
+import React, { memo, useContext } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
@@ -8,8 +8,8 @@ import WordTypesDropdown from './components/form/WordTypesDropdown'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
-const GeneratorForm = props => {
-    const { wordList, setWordList, generateWord, preview, setPreview } = useContext(WordAPIContext)
+const GeneratorForm = () => {
+    const { setWordList, generateWord } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
     const go = (initial, dynamic = []) => {
@@ -21,7 +21,7 @@ const GeneratorForm = props => {
         if (dynamic.length > 0) mergedArr.push(...dynamic)
 
         const randomWords = mergedArr.map(v => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 generateWord(v.value, resolve);
             });
         });
@@ -85,7 +85,6 @@ const GeneratorForm = props => {
                                         variant="success"
                                         onClick={() => go(values.initial_word_types, values.dynamic_word_types)}>
                                         <i className="fa fa-play" />
-                                        Submitting
                                         </Button>
                                     <Button variant="danger" onClick={() => stop()}>
                                         <i className="fa fa-stop" />

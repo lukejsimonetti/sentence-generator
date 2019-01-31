@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
-const SentencePreview = props => {
+const SentencePreview = () => {
 
-    const { wordList, setWordList, generateWord, preview, setPreview } = useContext(WordAPIContext)
+    const { wordList, preview, setPreview } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
     useEffect(() => {
@@ -13,16 +13,16 @@ const SentencePreview = props => {
     }, [wordList])
 
     const buildPreview = () => {
-        if (wordList.length == 0) return
+        if (wordList.length === 0) return
 
         const lengthOffset = (wordList.length - 1)
         let newPreview = ""
-        const promises = wordList.map((v, i) => {
-            return new Promise((resolve, reject) => {
-                if (i == 0) {
+        wordList.map((v, i) => {
+            return new Promise((resolve) => {
+                if (i === 0) {
                     v = v.charAt(0).toUpperCase() + v.slice(1)
                 }
-                if (i == lengthOffset) {
+                if (i === lengthOffset) {
                     v += "!"
                 }
 
@@ -30,13 +30,8 @@ const SentencePreview = props => {
                 resolve()
             });
         })
-        Promise.all(promises)
-            .then(() => {
-                setPreview(newPreview)
-            })
-            .then(() => {
-                setIsSubmitting(false)
-            })
+        setPreview(newPreview)
+        setIsSubmitting(false)
     }
 
     return (
