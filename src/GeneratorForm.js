@@ -5,6 +5,7 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
 
 import WordTypesDropdown from './components/form/WordTypesDropdown'
+import {wordTypes} from './components/misc/data'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
@@ -40,20 +41,13 @@ const GeneratorForm = () => {
         <div>
             <FinalForm
                 onSubmit={() => { }}
-                initialValues={{ 'initial_word_types': { value: 'adjective', label: 'adjective' } }}
+                initialValues={{'dynamic_word_types': [wordTypes[0]] }}
                 mutators={{
                     ...arrayMutators
                 }}
                 render={({ mutators: { push, pop }, values }) => (
                     <Form onSubmit={(e) => e.preventDefault()}>
                         <Row className="mb-3">
-                            <Col md={2}>
-                                <Field
-                                    name={`initial_word_types`}
-                                    label="Word Type"
-                                    component={WordTypesDropdown}
-                                />
-                            </Col>
                             <FieldArray name="dynamic_word_types">
                                 {({ fields }) =>
                                     fields.map((name, index) => (
