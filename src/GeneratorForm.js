@@ -13,17 +13,13 @@ const GeneratorForm = () => {
     const { setWordList, generateWord } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
-    const go = (initial, dynamic = []) => {
+    const go = (values = []) => {
         setWordList([])
         setIsSubmitting(true)
 
-        let mergedArr = []
-        mergedArr.push(initial)
-        if (dynamic.length > 0) mergedArr.push(...dynamic)
-
-        const randomWords = mergedArr.map(v => {
+        const randomWords = values.map(v => {
             return new Promise((resolve) => {
-                generateWord(v.value, resolve);
+                generateWord(v.value, resolve)
             });
         });
 
@@ -45,7 +41,7 @@ const GeneratorForm = () => {
                 mutators={{
                     ...arrayMutators
                 }}
-                render={({ mutators: { push, pop }, values }) => (
+                render={({ form:{ mutators: { push, pop }}, values }) => (
                     <Form onSubmit={(e) => e.preventDefault()}>
                         <Row className="mb-3">
                             <FieldArray name="dynamic_word_types">
@@ -55,7 +51,12 @@ const GeneratorForm = () => {
                                             <Field
                                                 name={`${name}`}
                                                 label="Word Type"
-                                                component={WordTypesDropdown}
+                                                render={({input}) => (
+                                                    <WordTypesDropdown 
+                                                        input={input} 
+                                                        initialValue={wordTypes[0]} 
+                                                    />
+                                                )}
                                             />
                                         </Col>
                                     ))}
@@ -77,7 +78,7 @@ const GeneratorForm = () => {
                                     <Button
                                         disabled={isSubmitting}
                                         variant="success"
-                                        onClick={() => go(values.initial_word_types, values.dynamic_word_types)}>
+                                        onClick={() => go(values.dynamic_word_types)}>
                                         <i className="fa fa-play" />
                                         </Button>
                                     <Button variant="danger" onClick={() => stop()}>
