@@ -73,35 +73,45 @@ const GeneratorForm = () => {
                         <Row className="mb-3">
                             <Col md={2}>
                                 <ButtonGroup>
-                                    <Button variant="outline-success" onClick={() => push('dynamic_word_types')}>
-                                        <i className="fa fa-plus" />
-                                    </Button>
-                                    <Button variant="outline-danger" onClick={() => pop('dynamic_word_types')}>
-                                        <i className="fa fa-minus" />
-                                    </Button>
+                                    <TooltipHelper placement="bottom" text="Add Word Type">
+                                        <Button variant="outline-success" onClick={() => push('dynamic_word_types')}>
+                                            <i className="fa fa-plus" />
+                                        </Button>
+                                    </TooltipHelper>
+                                    <TooltipHelper placement="bottom" text="Remove Last Word Type">
+                                        <Button variant="outline-danger" onClick={() => pop('dynamic_word_types')}>
+                                            <i className="fa fa-minus" />
+                                        </Button>
+                                    </TooltipHelper>
                                 </ButtonGroup>
                             </Col>
                             <Col md={2}>
                                 <ButtonGroup>
-                                    <Button
-                                        disabled={isSubmitting}
-                                        variant="success"
-                                        type="submit"
-                                    >
-                                        <i className="fa fa-play" />
-                                    </Button>
-                                    <Button variant="danger" onClick={() => stop()}>
-                                        <i className="fa fa-stop" />
-                                    </Button>
-                                    <Button variant="primary"
-                                        onClick={() => {
-                                            for (var i = 1; i < values.dynamic_word_types.length; i++) {
-                                                pop('dynamic_word_types')
-                                            }
-                                        }}
-                                        disabled={isSubmitting || pristine}>
-                                        <i className="fa fa-undo" />
-                                    </Button>
+                                    <TooltipHelper placement="bottom" text="Generate Sentence!">
+                                        <Button
+                                            disabled={isSubmitting}
+                                            variant="success"
+                                            type="submit"
+                                        >
+                                            <i className="fa fa-play" />
+                                        </Button>
+                                    </TooltipHelper>
+                                    <TooltipHelper placement="bottom" text="Stop Generation">
+                                        <Button variant="danger" onClick={() => stop()}>
+                                            <i className="fa fa-stop" />
+                                        </Button>
+                                    </TooltipHelper>
+                                    <TooltipHelper placement="bottom" text="Clear Word Types">
+                                        <Button variant="primary"
+                                            onClick={() => {
+                                                for (var i = 1; i < values.dynamic_word_types.length; i++) {
+                                                    pop('dynamic_word_types')
+                                                }
+                                            }}
+                                            disabled={isSubmitting || pristine}>
+                                            <i className="fa fa-undo" />
+                                        </Button>
+                                    </TooltipHelper>
                                 </ButtonGroup>
                             </Col>
                         </Row>
