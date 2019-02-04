@@ -12,13 +12,14 @@ import { AppStateContext } from './components/context/AppStateContext'
 
 const GeneratorForm = () => {
     const { setWordState, setWordCount, generateWord, setPreview } = useContext(WordAPIContext)
-    const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
+    const { isSubmitting, setIsSubmitting, setStopGeneration } = useContext(AppStateContext)
 
     const generate = (formValues = []) => {
         const values = formValues.dynamic_word_types
         setWordCount(values.length)
         setWordState([])
         setPreview("")
+        setStopGeneration(false)
         setIsSubmitting(true)
 
         const randomWords = values.map(v => {
@@ -28,15 +29,20 @@ const GeneratorForm = () => {
         });
 
         Promise.all(randomWords)
-            .then(words =>
-                 words.map((word) => {
-                   return setWordState(word)
-                })
+            .then(words => {
+                for (let i = 0; i < words.length; i++) {
+                    ((index) => {
+                        setTimeout(() => {
+                            setWordState(words[index])
+                        }, 1000 * index)
+                    })(i)
+                }
+            }
             )
     }
 
     const stop = () => {
-
+        setStopGeneration(true)
     }
 
     return (
@@ -89,7 +95,7 @@ const GeneratorForm = () => {
                             </Col>
                             <Col md={2}>
                                 <ButtonGroup>
-                                    <TooltipHelper placement="bottom" text="Generate Sentence!">
+                                    <TooltipHelper placement="left" text="Generate Sentence!">
                                         <Button
                                             disabled={isSubmitting}
                                             variant="success"

@@ -6,7 +6,7 @@ import { AppStateContext } from './components/context/AppStateContext'
 const SentencePreview = () => {
 
     const { wordState, wordCount, preview, setPreview} = useContext(WordAPIContext)
-    const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
+    const { isSubmitting, setIsSubmitting, stopGeneration } = useContext(AppStateContext)
 
     useEffect(() => {
         buildPreview()
@@ -16,16 +16,10 @@ const SentencePreview = () => {
         let newWord = wordState
         if (newWord.length === 0) return
         if(typeof newWord !== "string") return
+        if(stopGeneration) return
+        
 
-        if (isFirstWord()) {
-            newWord = upperCase(newWord)
-        }
-        if(isLastWord()){
-            newWord = addExclamation(newWord)
-        }
-        let newPreview = preview + " " + newWord
-
-        setPreview(newPreview)
+        setPreview(generateNewPreview(newWord))
         setIsSubmitting(false)
     }
     
@@ -43,6 +37,17 @@ const SentencePreview = () => {
 
     const isLastWord = () => {
         return (preview.split(' ').length === (wordCount)) ? true : false
+    }
+
+        setPreview(generateNewPreview(newWord))
+        const generateNewPreview = () => {
+        if (isFirstWord()) {
+            newWord = upperCase(newWord)
+        }
+        if(isLastWord()){
+            newWord = addExclamation(newWord)
+        }
+        let newPreview = preview + " " + newWord
     }
 
     return (
