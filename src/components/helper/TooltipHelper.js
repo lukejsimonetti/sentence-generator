@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-export const TooltipHelper = ({children, placement, text}) => {
+export const TooltipHelper = ({ children, placement, text }) => {
     return (
         <OverlayTrigger
             placement={placement}
@@ -10,7 +10,7 @@ export const TooltipHelper = ({children, placement, text}) => {
                 <Tooltip id={text}>{text}</Tooltip>
             }
         >
-        {children}
+            {children}
         </OverlayTrigger>
     )
 }

@@ -5,7 +5,7 @@ import { AppStateContext } from './components/context/AppStateContext'
 
 const SentencePreview = () => {
 
-    const { wordState, wordCount, preview, setPreview} = useContext(WordAPIContext)
+    const { wordState, wordCount, preview, setPreview } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting, stopGeneration } = useContext(AppStateContext)
 
     useEffect(() => {
@@ -15,13 +15,13 @@ const SentencePreview = () => {
     const buildPreview = () => {
         let newWord = wordState
         if (newWord.length === 0) return
-        if(typeof newWord !== "string") return
-        if(stopGeneration) return
+        if (typeof newWord !== "string") return
+        if (stopGeneration) return
 
         setPreview(generateNewPreview(newWord))
         setIsSubmitting(false)
     }
-    
+
     const upperCase = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1)
     }
@@ -60,8 +60,8 @@ const SentencePreview = () => {
                     placeholder={isSubmitting ? "" : "Put your primo sentence here."}
                     disabled
                 />
-               {isSubmitting 
-                && <i className="fa fa-spin fa-spinner" style={{position: 'absolute', top: 10, left: -3}} />}
+                {isSubmitting
+                    && <i className="fa fa-spin fa-spinner" style={{ position: 'absolute', top: 10, left: -3 }} />}
             </Col>
         </Row>
     );
