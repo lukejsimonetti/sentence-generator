@@ -11,13 +11,14 @@ import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
 const GeneratorForm = () => {
-    const { setWordState, setWordCount, generateWord } = useContext(WordAPIContext)
+    const { setWordState, setWordCount, generateWord, setPreview } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
     const generate = (formValues = []) => {
         const values = formValues.dynamic_word_types
         setWordCount(values.length)
         setWordState([])
+        setPreview("")
         setIsSubmitting(true)
 
         const randomWords = values.map(v => {

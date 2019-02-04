@@ -29,13 +29,15 @@ const WordAPIProvider = props => {
 
     const [wordState, setWordState] = useState([])
     const [wordCount, setWordCount] = useState(0)
+    const [preview, setPreview] = useState("")
 
     const generateWord = (type, callback) => {
         //simulated xhr request
         return getRandomWordFromAPI(type, callback)
     }
 
-    return <WordAPIContext.Provider value={{ wordState, setWordState, wordCount, setWordCount, generateWord}}>
+    return <WordAPIContext.Provider 
+        value={{ wordState, setWordState, wordCount, setWordCount, generateWord, preview, setPreview}}>
         {props.children}
     </WordAPIContext.Provider>
 }

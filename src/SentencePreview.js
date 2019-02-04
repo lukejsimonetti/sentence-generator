@@ -5,8 +5,7 @@ import { AppStateContext } from './components/context/AppStateContext'
 
 const SentencePreview = () => {
 
-    const { wordState, wordCount} = useContext(WordAPIContext)
-    const [preview, setPreview] = useState("")
+    const { wordState, wordCount, preview, setPreview} = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
     useEffect(() => {
@@ -16,6 +15,7 @@ const SentencePreview = () => {
     const buildPreview = () => {
         let newWord = wordState
         if (newWord.length === 0) return
+        if(typeof newWord !== "string") return
 
         if (isFirstWord()) {
             newWord = upperCase(newWord)
@@ -28,6 +28,7 @@ const SentencePreview = () => {
         setPreview(newPreview)
         setIsSubmitting(false)
     }
+    
     const upperCase = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1)
     }
