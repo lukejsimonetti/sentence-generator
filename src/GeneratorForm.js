@@ -5,14 +5,14 @@ import { FieldArray } from 'react-final-form-arrays'
 import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
 
 import WordTypesDropdown from './components/form/WordTypesDropdown'
-import {wordTypes} from './components/misc/data'
+import { wordTypes } from './components/misc/data'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
 const GeneratorForm = () => {
     const { setWordList, generateWord } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
-    
+
     const required = value => (value ? undefined : "Required");
 
     const go = (formValues = []) => {
@@ -41,13 +41,13 @@ const GeneratorForm = () => {
         <div>
             <FinalForm
                 onSubmit={(e) => go(e)}
-                initialValues={{'dynamic_word_types': [wordTypes[0]] }}
+                initialValues={{ 'dynamic_word_types': [wordTypes[0]] }}
                 keepDirtyOnReinitialize={true}
                 mutators={{
                     ...arrayMutators
                 }}
-                render={({ form:{ mutators: { push, pop }}, handleSubmit }) => (
-                    <Form onSubmit={handleSubmit}>
+                render={({ form: { mutators: { push, pop } }, handleSubmit, pristine, values }) => (
+                    <Form onSubmit={handleSubmit}>reset
                         <Row className="mb-3">
                             <FieldArray name="dynamic_word_types">
                                 {({ fields }) =>
@@ -57,8 +57,8 @@ const GeneratorForm = () => {
                                                 validate={required}
                                                 name={`${name}`}
                                                 label="Word Type"
-                                                render={({input, meta}) => (
-                                                    <WordTypesDropdown 
+                                                render={({ input, meta }) => (
+                                                    <WordTypesDropdown
                                                         {...input}
                                                         meta={meta}
                                                         initialValue={wordTypes[0]}
@@ -87,11 +87,20 @@ const GeneratorForm = () => {
                                         disabled={isSubmitting}
                                         variant="success"
                                         type="submit"
-                                        >
+                                    >
                                         <i className="fa fa-play" />
-                                        </Button>
+                                    </Button>
                                     <Button variant="danger" onClick={() => stop()}>
                                         <i className="fa fa-stop" />
+                                    </Button>
+                                    <Button variant="primary"
+                                        onClick={() => {
+                                            for (var i = 1; i < values.dynamic_word_types.length; i++) {
+                                                pop('dynamic_word_types')
+                                            }
+                                        }}
+                                        disabled={isSubmitting || pristine}>
+                                        <i className="fa fa-undo" />
                                     </Button>
                                 </ButtonGroup>
                             </Col>
