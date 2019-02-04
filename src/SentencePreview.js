@@ -1,37 +1,47 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
 const SentencePreview = () => {
 
-    const { wordList, preview, setPreview } = useContext(WordAPIContext)
+    const { wordState, wordCount} = useContext(WordAPIContext)
+    const [preview, setPreview] = useState("")
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
     useEffect(() => {
         buildPreview()
-    }, [wordList])
+    }, [wordState])
 
     const buildPreview = () => {
-        if (wordList.length === 0) return
+        let newWord = wordState
+        if (newWord.length === 0) return
 
-        const lengthOffset = (wordList.length - 1)
-        let newPreview = ""
-        wordList.map((v, i) => {
-            return new Promise((resolve) => {
-                if (i === 0) {
-                    v = v.charAt(0).toUpperCase() + v.slice(1)
-                }
-                if (i === lengthOffset) {
-                    v += "!"
-                }
+        if (isFirstWord()) {
+            newWord = upperCase(newWord)
+        }
+        if(isLastWord()){
+            newWord = addExclamation(newWord)
+        }
+        let newPreview = preview + " " + newWord
 
-                newPreview += " " + v
-                resolve()
-            });
-        })
         setPreview(newPreview)
         setIsSubmitting(false)
+    }
+    const upperCase = (word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1)
+    }
+
+    const addExclamation = (word) => {
+        return word += "!"
+    }
+
+    const isFirstWord = () => {
+        return (preview.length === 0) ? true : false
+    }
+
+    const isLastWord = () => {
+        return (preview.split(' ').length === (wordCount)) ? true : false
     }
 
     return (

@@ -3,6 +3,7 @@ import {sample} from 'lodash'
 
 export const WordAPIContext = React.createContext({})
 
+//simulated api 
 var dictionary = {
     adjective: ['bogus', 'boss', 'gnarlatious', 'hairy', 'outrageous', 'rad', 'stoked'],
     adverb: ['bogusly', 'gnarlatiously', 'tubularly'],
@@ -26,15 +27,15 @@ var dictionary = {
 
 const WordAPIProvider = props => {
 
-    const [wordList, setWordList] = useState([])
-    const [preview, setPreview] = useState("")
+    const [wordState, setWordState] = useState([])
+    const [wordCount, setWordCount] = useState(0)
 
     const generateWord = (type, callback) => {
         //simulated xhr request
         return getRandomWordFromAPI(type, callback)
     }
 
-    return <WordAPIContext.Provider value={{ wordList, setWordList, generateWord, preview, setPreview }}>
+    return <WordAPIContext.Provider value={{ wordState, setWordState, wordCount, setWordCount, generateWord}}>
         {props.children}
     </WordAPIContext.Provider>
 }

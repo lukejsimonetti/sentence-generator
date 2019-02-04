@@ -6,19 +6,18 @@ import { Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
 
 import WordTypesDropdown from './components/form/WordTypesDropdown'
 import { wordTypes } from './components/misc/data'
+import { TooltipHelper } from './components/helper/TooltipHelper'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
 
 const GeneratorForm = () => {
-    const { setWordList, generateWord } = useContext(WordAPIContext)
+    const { setWordState, setWordCount, generateWord } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
 
-    const required = value => (value ? undefined : "Required");
-
-    const go = (formValues = []) => {
+    const generate = (formValues = []) => {
         const values = formValues.dynamic_word_types
-
-        setWordList([])
+        setWordCount(values.length)
+        setWordState([])
         setIsSubmitting(true)
 
         const randomWords = values.map(v => {
@@ -29,7 +28,9 @@ const GeneratorForm = () => {
 
         Promise.all(randomWords)
             .then(words =>
-                setWordList(words)
+                 words.map((word) => {
+                   return setWordState(word)
+                })
             )
     }
 
@@ -40,21 +41,21 @@ const GeneratorForm = () => {
     return (
         <div>
             <FinalForm
-                onSubmit={(e) => go(e)}
+                onSubmit={(e) => generate(e)}
                 initialValues={{ 'dynamic_word_types': [wordTypes[0]] }}
                 keepDirtyOnReinitialize={true}
                 mutators={{
                     ...arrayMutators
                 }}
                 render={({ form: { mutators: { push, pop } }, handleSubmit, pristine, values }) => (
-                    <Form onSubmit={handleSubmit}>reset
+                    <Form onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <FieldArray name="dynamic_word_types">
                                 {({ fields }) =>
                                     fields.map((name, index) => (
                                         <Col md={2} key={name}>
                                             <Field
-                                                validate={required}
+                                                validate={value => (value ? undefined : "Required")}
                                                 name={`${name}`}
                                                 label="Word Type"
                                                 render={({ input, meta }) => (
