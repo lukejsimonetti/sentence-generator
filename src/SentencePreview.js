@@ -17,7 +17,6 @@ const SentencePreview = () => {
         if (newWord.length === 0) return
         if(typeof newWord !== "string") return
         if(stopGeneration) return
-        
 
         setPreview(generateNewPreview(newWord))
         setIsSubmitting(false)
@@ -28,7 +27,7 @@ const SentencePreview = () => {
     }
 
     const addExclamation = (word) => {
-        return word += "!"
+        return preview.slice(0, -3) + " " + word + "!"
     }
 
     const isFirstWord = () => {
@@ -36,18 +35,18 @@ const SentencePreview = () => {
     }
 
     const isLastWord = () => {
-        return (preview.split(' ').length === (wordCount)) ? true : false
+        return (preview.split(' ').length === (wordCount - 1)) ? true : false
     }
 
-        setPreview(generateNewPreview(newWord))
-        const generateNewPreview = () => {
+    const generateNewPreview = (newWord) => {
         if (isFirstWord()) {
-            newWord = upperCase(newWord)
+            return upperCase(newWord) + "..."
         }
-        if(isLastWord()){
-            newWord = addExclamation(newWord)
+        if (isLastWord()) {
+            return addExclamation(newWord)
         }
-        let newPreview = preview + " " + newWord
+
+        return preview.slice(0, -3) + " " + newWord + "..."
     }
 
     return (
