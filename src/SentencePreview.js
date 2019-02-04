@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { WordAPIContext } from './components/context/WordAPIContext'
 import { AppStateContext } from './components/context/AppStateContext'
