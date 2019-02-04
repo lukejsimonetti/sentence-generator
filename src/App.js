@@ -14,6 +14,7 @@ const App = props => {
           <Card>
             <Card.Header as="h1" className="text-center">Surf's Up! <i className="fa fa-hand-rock-o"/></Card.Header>
             <Card.Body>
+              <h4>Select a word type:</h4>
               <GeneratorForm />
               <SentencePreview />
             </Card.Body>

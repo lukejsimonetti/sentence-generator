@@ -12,8 +12,12 @@ import { AppStateContext } from './components/context/AppStateContext'
 const GeneratorForm = () => {
     const { setWordList, generateWord } = useContext(WordAPIContext)
     const { isSubmitting, setIsSubmitting } = useContext(AppStateContext)
+    
+    const required = value => (value ? undefined : "Required");
 
-    const go = (values = []) => {
+    const go = (formValues = []) => {
+        const values = formValues.dynamic_word_types
+
         setWordList([])
         setIsSubmitting(true)
 
@@ -36,25 +40,29 @@ const GeneratorForm = () => {
     return (
         <div>
             <FinalForm
-                onSubmit={() => { }}
+                onSubmit={(e) => go(e)}
                 initialValues={{'dynamic_word_types': [wordTypes[0]] }}
+                keepDirtyOnReinitialize={true}
                 mutators={{
                     ...arrayMutators
                 }}
-                render={({ form:{ mutators: { push, pop }}, values }) => (
-                    <Form onSubmit={(e) => e.preventDefault()}>
+                render={({ form:{ mutators: { push, pop }}, handleSubmit }) => (
+                    <Form onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <FieldArray name="dynamic_word_types">
                                 {({ fields }) =>
                                     fields.map((name, index) => (
                                         <Col md={2} key={name}>
                                             <Field
+                                                validate={required}
                                                 name={`${name}`}
                                                 label="Word Type"
-                                                render={({input}) => (
+                                                render={({input, meta}) => (
                                                     <WordTypesDropdown 
-                                                        input={input} 
-                                                        initialValue={wordTypes[0]} 
+                                                        {...input}
+                                                        meta={meta}
+                                                        initialValue={wordTypes[0]}
+                                                        index={index}
                                                     />
                                                 )}
                                             />
@@ -78,7 +86,8 @@ const GeneratorForm = () => {
                                     <Button
                                         disabled={isSubmitting}
                                         variant="success"
-                                        onClick={() => go(values.dynamic_word_types)}>
+                                        type="submit"
+                                        >
                                         <i className="fa fa-play" />
                                         </Button>
                                     <Button variant="danger" onClick={() => stop()}>
